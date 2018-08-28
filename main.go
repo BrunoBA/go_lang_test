@@ -16,6 +16,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	//This it the router
 	http.HandleFunc("/", index)
 	fmt.Println("Server is up and listening on port 8080.")
 	http.ListenAndServe(":8080", nil)
