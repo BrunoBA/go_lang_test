@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 var DB = make(map[string]string)
@@ -35,6 +36,7 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
+	godotenv.Load()
 	r := setupRouter()
 	port := os.Getenv("PORT")
 
