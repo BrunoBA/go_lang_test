@@ -11,7 +11,11 @@ import (
 var DB = make(map[string]string)
 
 func setupRouter() *gin.Engine {
-	// gin.SetMode(gin.ReleaseMode)
+
+	if os.Getenv("ENV_MODE") == "prod" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	// Disable Console Color
 	// gin.DisableConsoleColor()
 	r := gin.Default()
