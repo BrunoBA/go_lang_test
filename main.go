@@ -11,14 +11,14 @@ import (
 var DB = make(map[string]string)
 
 func setupRouter() *gin.Engine {
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 	// Disable Console Color
 	// gin.DisableConsoleColor()
 	r := gin.Default()
 
 	// Ping test
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
+		c.String(http.StatusOK, os.Getenv("PORT"))
 	})
 
 	// Get user value
