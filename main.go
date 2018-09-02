@@ -1,53 +1,30 @@
 package main
 
 import (
-	"net/http"
-	"os"
+	"database/sql"
+	"fmt"
+	"log"
 
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	"github.com/BrunoBA/go_lang_test/api/models/user"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-var DB = make(map[string]string)
-
-func setupRouter() *gin.Engine {
-
-	if os.Getenv("ENV_MODE") == "prod" {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
-	// Disable Console Color
-	// gin.DisableConsoleColor()
-	r := gin.Default()
-
-	// Ping test
-	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, os.Getenv("ENV_MODE"))
-	})
-
-	// Get user value
-	r.GET("/user/:name", func(c *gin.Context) {
-		user := c.Params.ByName("name")
-		value, ok := DB[user]
-		if ok {
-			c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
-		} else {
-			c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
-		}
-	})
-
-	return r
-}
-
 func main() {
-	godotenv.Load()
-	r := setupRouter()
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		port = "3000"
+	// db, err := sql.Open("mysql", "root:@/go_lang_test")
+	db, err := sql.Open("mysql", "bfxj8igiok2x69ut:kktf2byp3rlpou95@nivk0hz7m5elq4ql.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/agcltfrrpw681ogm")
+	if err != nil {
+		log.Fatal(err)
 	}
+	defer db.Close()
 
-	// Listen and Server in 0.0.0.0:8080
-	r.Run(":" + port)
+	rows, _ := db.Query("SELECT id, first_name FROM users")
+	defer rows.Close()
+
+	for rows.Next() {
+		var u = user.NewUser()
+
+		rows.Scan(&u.Id, &u.Name)
+
+		fmt.Println(u)
+	}
 }
