@@ -18,7 +18,7 @@ func setupRouter() *gin.Engine {
 
 	// Ping test
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, os.Getenv("PORT"))
+		c.String(http.StatusOK, os.Getenv("ENV_MODE"))
 	})
 
 	// Get user value
